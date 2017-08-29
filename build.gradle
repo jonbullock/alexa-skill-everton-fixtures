@@ -1,0 +1,46 @@
+plugins {
+    id 'de.fuerstenau.buildconfig' version '1.1.8'
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+
+group = "com.jonathanbullock.alexa.evertonfixtures"
+version = '1.0'
+
+compileJava {
+    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}
+
+repositories {
+    jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.amazon.alexa:alexa-skills-kit:1.4.0'
+    compile 'com.amazonaws:aws-lambda-java-core:1.1.0'
+    compile 'com.amazonaws:aws-lambda-java-log4j:1.0.0'
+    compile 'commons-io:commons-io:2.4'
+    compile 'log4j:log4j:1.2.17'
+    compile 'org.slf4j:slf4j-api:1.7.10'
+    testCompile 'junit:junit:4.12'
+}
+
+buildConfig {
+    appName = project.name
+    version = project.version
+    buildConfigField 'String', 'APPLICATION_ID', APPLICATION_ID
+    buildConfigField 'String', 'REST_API_TOKEN', REST_API_TOKEN
+}
+
+task buildZip(type: Zip) {
+    from compileJava
+    from processResources
+    into('lib') {
+        from configurations.runtime
+    }
+}
+
+build.dependsOn buildZip

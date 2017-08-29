@@ -1,0 +1,11 @@
+GetNextEvertonFixtureIntent tell me the next fixture
+GetNextEvertonFixtureIntent tell me the next game
+GetNextEvertonFixtureIntent tell me the next everton fixture
+GetNextEvertonFixtureIntent tell me the next everton game
+GetNextEvertonFixtureIntent what is the next everton fixture
+GetNextEvertonFixtureIntent what is the next everton game
+GetNextEvertonFixtureIntent what's the next everton fixture
+GetNextEvertonFixtureIntent what's the next everton game
+GetNextEvertonFixtureIntent get the next everton fixture
+GetNextEvertonFixtureIntent get the next everton game
+

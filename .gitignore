@@ -1,0 +1,11 @@
+.DS_Store
+.gradle
+/build/
+/out/
+
+gradle.properties
+!gradle-wrapper.jar
+
+.idea
+*.ipr
+*.iws

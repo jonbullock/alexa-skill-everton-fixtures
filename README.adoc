@@ -1,0 +1,20 @@
+= Everton Fixtures Alexa Skill
+Jonathan Bullock <https://github.com/jonbullock[@jonbullock]>
+
+An Amazon Alexa Skill to tell you what the next Everton FC fixture is.
+
+== Build
+
+First create a local file called `gradle.properties` in the root of the project that contains the following:
+
+----
+APPLICATION_ID=<REPLACE_WITH_YOUR_APP_ID>
+REST_API_TOKEN=<REPLACE_WITH_YOUR_API_TOKEN>
+----
+
+Once done you can create a ZIP file that can be deployed to Amazon AWS Lambda by running:
+
+----
+$ ./gradlew build
+----
+

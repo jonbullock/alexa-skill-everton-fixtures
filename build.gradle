@@ -6,7 +6,7 @@ apply plugin: 'java'
 apply plugin: 'idea'
 
 group = "com.jonathanbullock.alexa.evertonfixtures"
-version = '1.0'
+version = '1.0.1'
 
 compileJava {
     targetCompatibility = JavaVersion.VERSION_1_8

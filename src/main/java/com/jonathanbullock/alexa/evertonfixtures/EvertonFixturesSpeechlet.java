@@ -78,7 +78,7 @@ public class EvertonFixturesSpeechlet implements Speechlet {
         StringBuilder builder = new StringBuilder();
         try {
             String line;
-            URLConnection conn = new URL("http://api.football-data.org/v1/teams/62/fixtures").openConnection();
+            URLConnection conn = new URL("http://api.football-data.org/v2/teams/62/matches").openConnection();
             conn.setRequestProperty("X-Auth-Token", BuildConfig.REST_API_TOKEN);
             inputStream = new InputStreamReader(conn.getInputStream(), Charset.forName("US-ASCII"));
 
@@ -87,8 +87,8 @@ public class EvertonFixturesSpeechlet implements Speechlet {
                 builder.append(line);
             }
 
-            String reqsLeft = conn.getHeaderField("X-Requests-Available");
-            log.info("API requests left = " + reqsLeft);
+            String reqsLeft = conn.getHeaderField("X-Requests-Available-Minute");
+            log.info("API requests available = " + reqsLeft);
         } catch (Exception e) {
             // reset builder to a blank string
             builder.setLength(0);
@@ -106,16 +106,18 @@ public class EvertonFixturesSpeechlet implements Speechlet {
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, Object> response = mapper.readValue(builder.toString(), Map.class);
                 if (response != null) {
-                    List<Map<String, Object>> fixtures = (List<Map<String, Object>>) response.get("fixtures");
-                    for (Map<String, Object> fixture : fixtures) {
-                        String dateString = fixture.get("date").toString();
+                    List<Map<String, Object>> matches = (List<Map<String, Object>>) response.get("matches");
+                    for (Map<String, Object> match : matches) {
+                        String dateString = match.get("utcDate").toString();
                         DateTime date = DateTime.parse(dateString);
                         if (date != null) {
                             if (date.isAfterNow()) {
-                                String homeTeam = fixture.get("homeTeamName").toString();
-                                String awayTeam = fixture.get("awayTeamName").toString();
+                                Map<String, Object> homeTeam = (Map<String, Object>) match.get("homeTeam");
+                                String homeTeamName = homeTeam.get("name").toString();
+                                Map<String, Object> awayTeam = (Map<String, Object>) match.get("awayTeam");
+                                String awayTeamName = awayTeam.get("name").toString();
                                 DateTimeFormatter fmt = DateTimeFormat.forPattern("dd MMMM yyyy");
-                                speechOutput = homeTeam + " versus " + awayTeam + " on " + fmt.print(date);
+                                speechOutput = homeTeamName + " versus " + awayTeamName + " on " + fmt.print(date);
                                 break;
                             }
                         }
@@ -124,6 +126,11 @@ public class EvertonFixturesSpeechlet implements Speechlet {
             } catch (IOException e) {
                 log.error("Exception occurred while parsing web service response.", e);
             }
+        }
+
+        if (speechOutput.isEmpty()) {
+            speechOutput = "Sorry, the Everton Fixtures web service is experiencing a problem. "
+                    + "Please try again later.";
         }
 
         // Create the Simple card content.
